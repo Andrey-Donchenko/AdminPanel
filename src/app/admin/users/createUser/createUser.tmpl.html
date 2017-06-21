@@ -1,0 +1,48 @@
+<md-card class="edit-page">
+	<h2>Create User</h2><br>
+	<form name="createUser">
+		<md-input-container class="md-block">
+			<label>Name</label>
+			<input label="name" name="name" type="text" ng-model="vm.user.name" enter-click="vm.createUser(createUser.$valid)" required/>
+			<div ng-messages="createUser.name.$error" md-auto-hide="false" ng-show="createUser.name.$touched">
+				<div ng-message when="required"><span translate>Please enter username.</span></div>
+			</div>
+		</md-input-container>
+		<md-input-container class="md-block">
+			<label>Email</label>
+			<input label="email" name="email" type="email" ng-model="vm.user.email" enter-click="vm.createUser(createUser.$valid)" required/>
+			<div ng-messages="createUser.email.$error" md-auto-hide="false" ng-show="createUser.email.$touched">
+				<div ng-message when="required"><span translate>Please enter email address.</span></div>
+				<div ng-message when="email"><span translate>Please enter a valid email address.</span></div>
+			</div>
+		</md-input-container>
+		 <md-input-container class="md-block">
+            <label>Group</label>
+           	<div ng-controller="LoadGroupSelectController as LoadGroupCtrl">
+				<md-select ng-model="vm.user.group">
+					<md-option ng-value="group" ng-repeat="group in LoadGroupCtrl.groups">{{group}}</md-option>
+				</md-select>
+			</div>
+        </md-input-container>
+		<md-input-container class="md-block">
+			<label>Password</label>
+			<input label="password" name="password" type="password" minlength="8" ng-model="vm.user.password" enter-click="vm.createUser(createUser.$valid)" required/>
+			<div ng-messages="createUser.password.$error" md-auto-hide="false" ng-show="createUser.password.$touched">
+				<div ng-message when="required"><span translate>Please enter password.</span></div>
+				<div ng-message when="minlength"><span translate>This field can be at least 8 characters long.</span></div> 
+			</div>
+		</md-input-container>
+		<div layout="row" layout-align="space-between start"
+			ng-controller="AvatarUploadController as AvatarUploadCtrl">
+			<div class="user-ava"><img ng-src="{{AvatarUploadCtrl.avatar.url}}" alt=""></div>
+			<md-button class="md-primary md-raised" ng-model="vm.file" ngf-accept="'image/*'" ngf-select="AvatarUploadCtrl.uploadFile($file)" ng-disabled="AvatarUploadCtrl.status == 'uploading'" aria-label="upload">set avatar
+				<md-icon md-font-icon ng-class="{ 'zmdi zmdi-cloud-upload': AvatarUploadCtrl.status == 'idle', 'fa fa-spinner fa-pulse': AvatarUploadCtrl.status == 'uploading', 'zmdi zmdi-check': AvatarUploadCtrl.status == 'complete'}"></md-icon>
+			</md-button>
+		</div>
+		
+		<div layout="row" layout-align="end center">
+			<md-button class="md-primary" ng-disabled="createUser.$invalid" ng-click="vm.createUser(createUser.$valid)">create</md-button>
+			<md-button ui-sref="triangular.users">cancel</md-button>
+		</div>
+	</form>
+</md-card>

@@ -1,0 +1,23 @@
+<md-card class="edit-page">
+	<h2>Add Group</h2><br>
+	<form name="addGroup">
+		<md-input-container class="md-block">
+			<label>Name</label>
+			<input label="name" name="name" type="text" ng-model="vm.group.name" enter-click="vm.addGroup(addGroup.$valid)" required/>
+			<div ng-messages="addGroup.name.$error" md-auto-hide="false" ng-show="addGroup.name.$touched">
+				<div ng-message when="required"><span translate>Please enter groupname.</span></div>
+			</div>
+		</md-input-container>
+		<md-input-container class="md-block">
+			<label>Description</label>
+			<textarea label="description" name="description" ng-model="vm.group.description" required></textarea>
+			<div ng-messages="addGroup.description.$error" md-auto-hide="false" ng-show="addGroup.description.$touched">
+				<div ng-message when="required"><span translate>Please enter description.</span></div>
+			</div>
+		</md-input-container>
+		<div layout="row" layout-align="end center">
+			<md-button class="md-primary" ng-disabled="addGroup.$invalid" ng-click="vm.addGroup(addGroup.$valid)">add</md-button>
+			<md-button ui-sref="triangular.groups">cancel</md-button>
+		</div>
+	</form>
+</md-card>

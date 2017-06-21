@@ -1,0 +1,64 @@
+.name-content {
+	overflow: hidden;
+	white-space: nowrap;
+	outline: none;
+	-o-text-overflow: ellipsis;
+	   text-overflow: ellipsis;
+}
+.img-content {
+	height: 220px;
+
+	>img {
+		width: auto;
+		max-height: 100%;
+		margin: auto;
+	}
+}
+.card-container {
+	background-color: #f9f7e5;
+}
+.folder-container {
+	background-color: #ddfafe;
+	* {
+		outline: none;
+	}
+}
+.toolbar-content {
+	margin-bottom: 16px;
+}
+.change-name input {
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	outline: none;
+}
+.change-name button {
+	margin: 0;
+	padding: 0;
+}
+.ctrl-content  a {
+	text-decoration: none;
+}
+.content-progress {
+	width: 80%;
+}
+#drag-icon {
+	color: green !important;
+	&:hover {
+	    cursor: pointer;
+	    color: darkslategray !important;
+	}
+}
+.folder-card {
+	background-color: #4285f4 !important;
+	color: #fff !important;
+	.folder-icon {
+		color: #fff;
+	}
+}
+.edit-folder {
+	color: #f4b400 !important;
+}
+.delete-folder {
+	color: #db4437 !important;
+}

@@ -1,0 +1,115 @@
+<div class="padded-content-page" ng-if="vm.load">
+	<h3 class="margin-0" hide-xs flex ng-controller="CrumbsController as crumbsCtrl">
+         <span ng-show="crumbsCtrl.crumbs.length" ng-repeat="crumb in crumbsCtrl.crumbs">
+            <span class="padding-right-10"><a href="" ng-click="crumbsCtrl.navigateCrumb(crumb, vm.user)">{{crumb.name}}</a></span>
+            <md-icon md-font-icon="zmdi zmdi-chevron-right" ng-if="!$last"></md-icon>
+        </span>
+    </h3>
+	<md-toolbar ng-hide="vm.selected.length" class="md-table-toolbar md-default toolbar-content" layout="row" layout-align="space-between center" ng-controller="ModalController as modalCtrl">
+		<div>
+			<md-button 
+				class="md-accent md-raised" 
+				ngf-multiple="true" 
+				ngf-select="vm.uploadFiles($files)">
+				add file
+			</md-button>
+			<md-button 
+				class="md-accent md-raised" 
+				ng-click="modalCtrl.addFolder(vm.user.$id)">
+				add folder
+			</md-button>
+		</div>
+		<div ng-if="vm.selectFolders.length">
+			<md-icon class="md-accent edit-icon-margin edit-folder" md-font-icon="fa fa-edit" title="Edit folder"
+				ng-if="vm.selectFolders.length === 1" 
+				ng-click="modalCtrl.editFolder(vm.user.$id, vm.selectFolders[0])">
+			</md-icon>
+			<md-icon class="md-warn edit-icon-margin delete-folder" md-font-icon="fa fa-trash-o" title="Delete folder(s)"
+				ng-click="modalCtrl.deleteFolder(vm.user.$id, vm.selectFolders, vm.setFolder)">
+			</md-icon>
+		</div>
+	</md-toolbar>
+	<md-toolbar ng-show="vm.selected.length" class="md-table-toolbar alternate toolbar-content">
+			<div class="md-toolbar-tools" layout-align="space-between center">
+				<span>{{vm.selected.length}} {{vm.selected.length > 1 ? 'files' : 'file'}} selected</span>
+				<md-icon 
+					class="edit-icon trash-btn" 
+					md-font-icon="fa fa-trash-o" 
+					ng-controller="ModalController as modalCtrl" 
+					ng-click="modalCtrl.deleteFiles(vm.user.$id, vm.selected, vm.check)">
+				</md-icon>
+			</div>
+	</md-toolbar>
+
+	<div class="folder-container" layout="row" layout-align="start center" layout-wrap ng-show="foldersCtrl.folders.content" ng-controller="FoldersController as foldersCtrl">
+		<div flex="10" flex-md="20" flex-sm="33" flex-xs="50"
+			dragula='"drag-file"'
+			dragula-model="foldersCtrl.folders.content"
+			ng-if="folder.dest === vm.dest" 
+			ng-repeat="folder in foldersCtrl.folders.content">
+			<md-card id="drag-folder" class="drag-folder padding-10 margin-10" layout="row" layout-align="start center"
+				ng-class="foldersCtrl.state[$index] || vm.setFolder[$index] ? 'folder-card' : ''"
+				ng-click="vm.setFolder[$index] = !vm.setFolder[$index]; foldersCtrl.clickFolder(folder, $index, vm.selectFolders, vm.setFolder)"
+				ng-mouseenter="foldersCtrl.state[$index] = foldersCtrl.hover = true; foldersCtrl.folderId = folder.folderId"
+				ng-mouseleave="foldersCtrl.state[$index] = foldersCtrl.hover = false"
+				ng-dblclick="foldersCtrl.openFolder(folder, vm.user)">
+				<md-icon class="folder-icon margin-left-10 margin-right-10" md-font-icon="fa fa-folder"></md-icon>
+                <div class="name-content" title="{{folder.name}}">{{folder.name}}</div>
+			</md-card>
+		</div>
+	</div>
+
+	<div class="card-container" layout="row" layout-wrap ng-show="vm.user.content">
+		<div flex="20" flex-md="33" flex-sm="50" flex-xs="100" 
+			dragula='"drag-file"'
+			dragula-model="vm.user.content"
+			ng-if="item.dest === vm.dest" 
+			ng-repeat="item in vm.user.content">
+			<md-card>
+				<div layout="column" layout-align="center center" class="img-content" title="{{item.name}}">
+					<img class="img-responsive" ng-show="item.url" ng-src="{{vm.checkType(item.type) ? item.url : 'assets/images/elements/file-icon.png'}}">
+					<md-progress-linear class="md-primary content-progress" ng-hide="item.url" md-mode="determinate" value="{{vm.determinateValue[item.fullPath]}}"></md-progress-linear>
+				</div>
+				<md-divider></md-divider>
+				<md-card-content>
+					<div 
+						class="name-content text-center" 
+						title="{{item.name}}" 
+						ng-hide="vm.changeName === $index" 
+						ng-dblclick="vm.changeName = $index">{{item.name}}</div>
+					<div class="change-name" layout="row" layout-align="space-between center" ng-if="vm.changeName === $index" >
+						<input type="text" id="fileName" required flex="70" 
+							ng-keypress="vm.checkName($event)"
+							ng-model="vm.newFileName" 
+							ng-value="vm.trimFileName(item.name)" 
+							enter-click="vm.changeFileName(item)">
+						<button ng-click="vm.changeFileName(item)">change</button>
+					</div>
+				</md-card-content>
+				<md-divider></md-divider>
+				<md-card-actions class="ctrl-content" layout="row" layout-align="space-around center" layout-align-md="space-between center" layout-margin>
+					<md-checkbox 
+						class="md-primary margin-left-10" 
+						ng-disabled="!item.url"
+						ng-model="vm.check[$index]" 
+						ng-change="vm.checkItem(item, $index)">
+					</md-checkbox>
+					<div>
+						<a href="{{item.url}}" download ng-show="item.url">
+							<md-icon class="md-accent edit-icon" md-font-icon="fa fa-download" title="Download"></md-icon>
+						</a>
+						<md-icon 
+							class="md-warn edit-icon-margin" 
+							md-font-icon="fa fa-trash-o" 
+							title="Delete" 
+							ng-show="item.url"
+							ng-controller="ModalController as modalCtrl" 
+							ng-click="modalCtrl.deleteFiles(vm.user.$id, item, vm.check, vm.selected)">
+						</md-icon>
+						<md-icon id="drag-icon" title="Dragable" md-font-icon="zmdi zmdi-arrows" ng-mousedown="vm.cardDrag = item.fullPath"></md-icon>
+					</div>
+				</md-card-actions>
+			</md-card>
+		</div>
+	</div>
+</div>

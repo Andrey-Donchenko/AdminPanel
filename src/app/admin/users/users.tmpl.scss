@@ -1,0 +1,68 @@
+.elements-image-table-example {
+  .thumb-cell {
+    max-width: 104px;
+    width: 104px;
+    padding: 16px 32px;
+
+    div {
+      overflow:hidden;
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
+      border: 1px solid rgba(0,0,0,0.2);
+      background-size: cover;
+      -webkit-box-shadow: 0 8px 10px rgba(0,0,0,.3);
+              box-shadow: 0 8px 10px rgba(0,0,0,.3);
+    }
+  }
+}
+.edit-icon-margin {
+  margin: 0 15px;
+}
+.edit-icon, .edit-icon-margin {
+  &:hover {
+    cursor: pointer;
+    color: darkslategray !important;
+  }
+}
+
+table.md-table {
+  td {
+    vertical-align: middle;
+    img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        -webkit-box-sizing: content-box;
+                box-sizing: content-box;
+        margin-top: 4px;
+      }
+  }
+  thead {
+    tr {
+      height: 0;
+    }
+  }
+}
+
+.md-table-toolbar {
+  input {
+    width: 100%;
+    margin: 0;
+    border: none;
+    color: rgba(0, 0, 0, 0.87);
+    &:focus {
+        outline: none;
+    }
+  }
+}
+
+.trash-btn {
+  color: white !important;
+}
+.content-btn {
+  color: green !important;
+}
+.content-link {
+  font-size: 14px;
+}

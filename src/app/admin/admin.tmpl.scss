@@ -1,0 +1,15 @@
+.edit-page {
+  padding: 20px;
+  width: 50% !important;
+  margin: 10px auto;
+}
+.user-ava {
+	width: 150px;
+	height: 150px;
+
+	> img {
+		max-width: 150px;
+		max-height: 150px;
+		border-radius: 10px;
+	}
+}

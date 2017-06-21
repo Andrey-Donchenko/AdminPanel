@@ -1,0 +1,35 @@
+<div ng-controller="GroupsController as vm">
+	<md-card>
+		<md-toolbar class="md-table-toolbar md-default">
+			<div class="md-toolbar-tools">
+				<md-button class="md-accent md-raised" ui-sref="triangular.addGroup">add group</md-button>
+			</div>
+		</md-toolbar>
+		<md-table-container>
+			<table md-table ng-model="vm.selected" >
+				<thead md-head md-order="vm.query.order" md-on-reorder="vm.getgroups">
+					<tr md-row>
+						<th md-column md-numeric md-order-by="name">Name</th>
+						<th md-column md-numeric>Description</th>
+						<th md-column md-numeric md-order-by="active">Active</th>
+						<th md-column md-numeric></th>
+					</tr>
+				</thead>
+				<tbody md-body>
+					<tr ng-repeat="group in vm.groups | orderBy: vm.query.order | limitTo: vm.query.limit : (vm.query.page -1) * vm.query.limit">
+						<td md-cell>{{::group.name}}</td>
+						<td md-cell>{{::group.description}}</td>
+						<td md-cell>
+							<md-switch class="md-primary pull-right" ng-model="group.active" aria-label="Primary Switch" ng-change="vm.groups.$save(group)"></md-switch>
+						</td>
+						<td md-cell>
+							<md-icon class="md-accent edit-icon" md-font-icon="fa fa-edit" ui-sref="triangular.editGroup({groupId: group.$id})" ng-click="vm.setGroup(group)"></md-icon>
+							<md-icon class="md-warn edit-icon" md-font-icon="fa fa-trash-o" ng-controller="ModalController as modalCtrl" ng-click="modalCtrl.deleteGroup(group)"></md-icon>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</md-table-container>
+		<md-table-pagination md-limit="vm.query.limit" md-limit-options="vm.limitOptions" md-page-select="vm.options.pageSelect" md-page="vm.query.page" md-total="{{vm.groups.length}}" md-on-paginate="vm.getGroups"></md-table-pagination>
+	</md-card>
+</div>

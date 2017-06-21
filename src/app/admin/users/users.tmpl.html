@@ -1,0 +1,68 @@
+<div ng-controller="UsersController as vm" ng-if="vm.load">
+	<md-card>
+		<md-toolbar ng-hide="vm.selected.length || vm.filter.show" class="md-table-toolbar md-default">
+			<div class="md-toolbar-tools">
+				<md-button class="md-accent md-raised" ui-sref="triangular.createUser">create user</md-button>
+				<div flex></div>
+				<md-button class="md-icon-button" ng-click="vm.filter.show = true">
+					<md-icon md-font-icon="zmdi zmdi-filter-list"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-toolbar ng-show="vm.filter.show && !vm.selected.length" class="md-table-toolbar md-default">
+			<div class="md-toolbar-tools">
+				<md-icon md-font-icon="zmdi zmdi-search"></md-icon>
+				<form flex="" name="vm.filter.form">
+					<input type="text" ng-model="vm.query.filter" ng-model-options="vm.filter.options" autofocus="vm.filter.show" placeholder="search">
+				</form>
+				<md-button class="md-icon-button" ng-click="vm.removeFilter()">
+					<md-icon md-font-icon="zmdi zmdi-close"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-toolbar class="md-table-toolbar alternate" ng-show="vm.selected.length">
+			<div class="md-toolbar-tools" layout-align="space-between center">
+				<span>{{vm.selected.length}} {{vm.selected.length > 1 ? 'users' : 'user'}} selected</span>
+				<md-icon class="edit-icon trash-btn" md-font-icon="fa fa-trash-o" ng-controller="ModalController as modalCtrl" ng-click="modalCtrl.deleteUser(vm.selected)"></md-icon>
+			</div>
+		</md-toolbar>
+		<md-table-container>
+			<table md-table md-row-select multiple ng-model="vm.selected">
+				<thead md-head md-order="vm.query.order" md-on-reorder="vm.getUsers">
+					<tr md-row>
+						<th md-column md-numeric></th>
+						<th md-column md-numeric md-order-by="name">Name</th>
+						<th md-column md-numeric md-order-by="email">Email</th>
+						<th md-column md-numeric md-order-by="group">Group</th>
+						<th md-column md-numeric md-order-by="active">Active</th>
+						<th md-column md-numeric>Files</th>
+						<th md-column md-numeric></th>
+					</tr>
+				</thead>
+				<tbody md-body>
+					<tr md-row md-select="user" md-select-id="$id" ng-repeat="user in vm.users | orderBy: vm.query.order | filter: vm.query.filter | limitTo: vm.query.limit : (vm.query.page -1) * vm.query.limit">
+						<td md-cell><img ng-src="{{user.avatar.url || 'assets/images/avatars/default.png'}}" alt=""></td>
+						<td md-cell>{{::user.name}}</td>
+						<td md-cell>{{::user.email}}</td>
+						<td md-cell>
+							<md-select ng-controller="LoadGroupSelectController as loadGroupCtrl" ng-model="user.group" placeholder="set group" ng-change="vm.users.$save(user)">
+								<md-option ng-value="group" ng-repeat="group in loadGroupCtrl.groups">{{group}}</md-option>
+							</md-select>
+						</td>
+						<td md-cell>
+							<md-switch class="md-primary pull-right" ng-model="user.active" aria-label="Primary Switch" ng-change="vm.users.$save(user)"></md-switch>
+						</td>
+						<td md-cell>
+							<a class="content-link" ui-sref="triangular.userStore({userId: user.$id})">{{user.content.length || '0'}}</a>
+						</td>
+						<td md-cell>
+							<md-icon class="md-accent edit-icon-margin" md-font-icon="fa fa-edit" ui-sref="triangular.editUser({userId: user.$id})"></md-icon>
+							<md-icon class="md-warn edit-icon-margin" md-font-icon="fa fa-trash-o" ng-controller="ModalController as modalCtrl" ng-click="modalCtrl.deleteUser(user)"></md-icon>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</md-table-container>
+		<md-table-pagination md-limit="vm.query.limit" md-limit-options="vm.limitOptions" md-page-select="vm.options.pageSelect" md-page="vm.query.page" md-total="{{vm.users.length}}" md-on-paginate="vm.getUsers"></md-table-pagination>
+	</md-card>
+</div>
